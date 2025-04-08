@@ -13,14 +13,20 @@ class Calculadora(private val ui: IEntradaSalida) {
         pedirNumero("Introduce el primer número: ", "El primer número no es válido!"),
         Operadores.getOperador(ui.pedirInfo("Introduce el operador (+, -, *, /): ").firstOrNull())
             ?: throw InfoCalcException("El operador no es válido!"),
-        pedirNumero("Introduce el segundo número: ", "El segundo número no es válido!"))
+        pedirNumero("Introduce el segundo número: ", "El segundo número no es válido!")
+    )
 
     private fun realizarCalculo(numero1: Double, operador: Operadores, numero2: Double) =
         when (operador) {
             Operadores.SUMA -> numero1 + numero2
             Operadores.RESTA -> numero1 - numero2
             Operadores.MULTIPLICACION -> numero1 * numero2
-            Operadores.DIVISION -> numero1 / numero2
+            Operadores.DIVISION -> {
+                if (numero2 == 0.0) {
+                    throw IllegalArgumentException("ERROR número inválido.")
+                }
+                    numero1 / numero2
+            }
         }
 
     fun iniciar() {
@@ -32,6 +38,10 @@ class Calculadora(private val ui: IEntradaSalida) {
                 ui.mostrar("Resultado: %.2f".format(resultado))
             } catch (e: NumberFormatException) {
                 ui.mostrarError(e.message ?: "Se ha producido un error!")
+            }  catch(e: IllegalArgumentException){
+                ui.mostrarError(e.message ?: "Se ha producido un error.")
+            }catch(e: InfoCalcException){
+                ui.mostrarError(e.message ?: "Se ha producido un error.")
             }
         } while (ui.preguntar())
         ui.limpiarPantalla()
