@@ -1,7 +1,12 @@
 package es.iesraprog2425.pruebaes
 
 import es.iesraprog2425.pruebaes.app.Calculadora
+import es.iesraprog2425.pruebaes.logging.GestorLog
 import es.iesraprog2425.pruebaes.ui.Consola
+import java.io.File
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 /*
 fun main() {
@@ -26,9 +31,9 @@ fun main() {
 }
 */
 
-fun main() {
-    Calculadora(Consola()).iniciar()
-}
+//fun main(args: Array<String>) {
+//    Calculadora(Consola()).iniciar()
+//}
 
 
 /*
@@ -54,3 +59,9 @@ fun main() {
     println(resultado)
 }
 */
+
+fun main(){
+    val consola = Consola()
+    val gestor = GestorLog(consola)
+    gestor.escribirArchivo(File("src/main/kotlin/logging/log"), 2.0, '/', 2.0)
+}

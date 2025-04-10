@@ -16,8 +16,8 @@ class Calculadora(private val ui: IEntradaSalida) {
         pedirNumero("Introduce el segundo número: ", "El segundo número no es válido!")
     )
 
-    private fun realizarCalculo(numero1: Double, operador: Operadores, numero2: Double) =
-        when (operador) {
+    private fun realizarCalculo(numero1: Double, operador: Operadores, numero2: Double): Double {
+        return when (operador) {
             Operadores.SUMA -> numero1 + numero2
             Operadores.RESTA -> numero1 - numero2
             Operadores.MULTIPLICACION -> numero1 * numero2
@@ -25,9 +25,10 @@ class Calculadora(private val ui: IEntradaSalida) {
                 if (numero2 == 0.0) {
                     throw IllegalArgumentException("ERROR número inválido.")
                 }
-                    numero1 / numero2
+                numero1 / numero2
             }
         }
+    }
 
     fun iniciar() {
         do {
