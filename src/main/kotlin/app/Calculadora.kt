@@ -1,7 +1,10 @@
 package es.iesraprog2425.pruebaes.app
 
+import es.iesraprog2425.pruebaes.logging.GestorLog
 import es.iesraprog2425.pruebaes.model.Operadores
 import es.iesraprog2425.pruebaes.ui.IEntradaSalida
+import java.io.File
+import java.lang.Thread.sleep
 
 class Calculadora(private val ui: IEntradaSalida) {
 
@@ -16,7 +19,7 @@ class Calculadora(private val ui: IEntradaSalida) {
         pedirNumero("Introduce el segundo número: ", "El segundo número no es válido!")
     )
 
-    private fun realizarCalculo(numero1: Double, operador: Operadores, numero2: Double): Double {
+    fun realizarCalculo(numero1: Double, operador: Operadores, numero2: Double): Double {
         return when (operador) {
             Operadores.SUMA -> numero1 + numero2
             Operadores.RESTA -> numero1 - numero2
@@ -30,13 +33,16 @@ class Calculadora(private val ui: IEntradaSalida) {
         }
     }
 
-    fun iniciar() {
+    fun iniciar(ruta: File) {
         do {
             try {
+                println("Cargando...")
+                sleep(2000)
                 ui.limpiarPantalla()
                 val (numero1, operador, numero2) = pedirInfo()
                 val resultado = realizarCalculo(numero1, operador, numero2)
                 ui.mostrar("Resultado: %.2f".format(resultado))
+                GestorLog(ui, this).actualizarArchivo(ruta, numero1, operador, numero2)
             } catch (e: NumberFormatException) {
                 ui.mostrarError(e.message ?: "Se ha producido un error!")
             }  catch(e: IllegalArgumentException){

@@ -4,6 +4,7 @@ import es.iesraprog2425.pruebaes.app.Calculadora
 import es.iesraprog2425.pruebaes.logging.GestorLog
 import es.iesraprog2425.pruebaes.ui.Consola
 import java.io.File
+import java.lang.Thread.sleep
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -60,8 +61,24 @@ fun main() {
 }
 */
 
-fun main(){
+fun main(args: Array<String>) {
     val consola = Consola()
-    val gestor = GestorLog(consola)
-    gestor.escribirArchivo(File("src/main/kotlin/logging/log"), 2.0, '/', 2.0)
+    val calculadora = Calculadora(consola)
+    val gestor = GestorLog(consola, calculadora)
+//    gestor.escribirArchivo(File("src/main/kotlin/logging/log"), 2.0, '/', 2.0)
+    if (args.isEmpty()) {
+        gestor.verificarDir(File("src/main/kotlin/logging/log"))
+        gestor.abrirLogReciente()
+    } else if (args.size == 1) {
+        gestor.verificarDir(File(args[0]))
+        gestor.abrirLogReciente(File(args[0]))
+    } else if (args.size == 4) {
+        gestor.escribirArchivo(File(args[0]), args[1].toDouble(), args[2][0], args[3].toDouble())
+        calculadora.iniciar(File(args[0]))
+
+
+    } else {
+        Consola().mostrarError("ERROR.")
+    }
+
 }
